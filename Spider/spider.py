@@ -9,6 +9,8 @@ from os.path import exists
 import requests
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+result_path = "result"
+base_url = "https://plugins.jetbrains.com/api/plugins/"
 
 
 def scrape_page(url) -> str | None:
@@ -73,17 +75,22 @@ def get_plugin_data(_plugin_id: int) -> dict:
     return result
 
 
-if __name__ == '__main__':
-    result_path = "result"
-    base_url = "https://plugins.jetbrains.com/api/plugins/"
-    plugin_id: int = 7332
-    logging.info(f"scraping plugin id: {plugin_id}")
-    res = get_plugin_data(plugin_id)
-    logging.info(f"scraped plugin id: {plugin_id}")
+def save_plugin_data(_plugin_id: int, res):
     if not exists(result_path):
         logging.error(f"{result_path} does not exist")
         exit(1)
-    logging.info(f"saving plugin data: {plugin_id}: {res['general_data']["name"]}")
-    with open(f"{result_path}/{plugin_id}.json", "w") as f:
+    with open(f"{result_path}/{_plugin_id}.json", "w") as f:
         json.dump(res, f)
+
+
+def scrape(plugin_id: int):
+    logging.info(f"scraping plugin id: {plugin_id}")
+    res = get_plugin_data(plugin_id)
+    logging.info(f"scraped plugin id: {plugin_id}")
+    logging.info(f"saving plugin data: {plugin_id}: {res['general_data']["name"]}")
+    save_plugin_data(plugin_id, res)
     logging.info(f"saved plugin data: {plugin_id}: {res['general_data']['name']}")
+
+
+if __name__ == '__main__':
+    scrape(10650)
