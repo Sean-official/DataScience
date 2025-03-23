@@ -9,7 +9,7 @@ from os.path import exists
 import requests
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-result_path = "result"
+result_path = "jetbrains/result"
 base_url = "https://plugins.jetbrains.com/api/plugins/"
 
 
